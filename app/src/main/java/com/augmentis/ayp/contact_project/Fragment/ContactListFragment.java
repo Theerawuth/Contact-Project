@@ -1,12 +1,11 @@
-package com.augmentis.ayp.contact_project;
+package com.augmentis.ayp.contact_project.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +15,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.augmentis.ayp.contact_project.ContactAdapter;
+import com.augmentis.ayp.contact_project.Model.Contact;
+import com.augmentis.ayp.contact_project.Model.ContactLab;
+import com.augmentis.ayp.contact_project.ContactNewOrEditActivity;
+import com.augmentis.ayp.contact_project.R;
+
+import java.util.List;
+
 public class ContactListFragment extends Fragment {
 
     private static final String TAG = "Contact";
     private RecyclerView contactRecycleView;
+    private ContactAdapter contactAdapter;
+    private Callbacks callbacks;
+
+    public interface  Callbacks {
+        void onContactSelected(Contact contact);
+        void onOpenSelectFirst();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callbacks = (Callbacks) context; // activity
+        callbacks.onOpenSelectFirst();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
+    }
 
     @Nullable
     @Override
@@ -27,10 +54,12 @@ public class ContactListFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
         contactRecycleView = (RecyclerView) v.findViewById(R.id.recycle_view_contact_list);
-        contactRecycleView.setLayoutManager(new LinearLayoutManager((getActivity())));
+        contactRecycleView.setLayoutManager(new GridLayoutManager((getActivity()), 3));
 
         Log.d(TAG, "Show ContactList");
+        updateUI();
         return v;
+
     }
 
     @Override
@@ -67,4 +96,36 @@ public class ContactListFragment extends Fragment {
         }
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /**
+     * Update UI
+     */
+    public void updateUI(){
+        ContactLab contactLab = ContactLab.getInstance(getActivity());
+        List<Contact> contactList = contactLab.getContact();
+        Log.d(TAG, "updateUI");
+
+        if(!contactList.isEmpty()){
+            Log.d(TAG, "Have list in database");
+        }
+
+        if(contactAdapter == null){
+            contactAdapter = new ContactAdapter(contactList, getActivity());
+            contactRecycleView.setAdapter(contactAdapter);
+        }
+        else
+        {
+            contactAdapter.setContact(contactLab.getContact());
+            contactAdapter.notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
 }
+
+
+

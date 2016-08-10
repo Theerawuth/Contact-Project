@@ -1,11 +1,11 @@
-package com.augmentis.ayp.contact_project;
+package com.augmentis.ayp.contact_project.Database;
 
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-import com.augmentis.ayp.contact_project.ContactDbSchema.ContactTable;
+import com.augmentis.ayp.contact_project.Database.ContactDbSchema.ContactTable;
 
 /**
  * Created by Theerawuth on 8/9/2016.

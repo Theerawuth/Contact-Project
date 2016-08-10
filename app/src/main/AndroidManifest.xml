@@ -2,20 +2,30 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.augmentis.ayp.contact_project">
 
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18"/>
+
+    <user-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ContactListActivity">
+        <activity android:name=".SingleFragmentActivity$ContactListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ContactNewOrEditActivity"></activity>
+        <activity android:name=".ContactNewOrEditActivity"
+            android:parentActivityName=".ContactNewOrEditActivity">
+
+        </activity>
     </application>
 
 </manifest>

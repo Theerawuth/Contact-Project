@@ -1,11 +1,16 @@
-package com.augmentis.ayp.contact_project;
+package com.augmentis.ayp.contact_project.Model;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import com.augmentis.ayp.contact_project.ContactDbSchema.ContactTable;
+import android.os.Environment;
 
+import com.augmentis.ayp.contact_project.Database.ContactBaseHelper;
+import com.augmentis.ayp.contact_project.Database.ContactCursorWrapper;
+import com.augmentis.ayp.contact_project.Database.ContactDbSchema.ContactTable;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -49,6 +54,21 @@ public class ContactLab {
         database.insert(ContactTable.NAMETABLE, null, contentValues);
     }
 
+    public void updateContact(Contact contact){
+        String uuidStr = contact.getId().toString();
+        ContentValues contentValues = getContentValues(contact);
+
+        database.update(ContactTable.NAMETABLE, contentValues,
+                ContactTable.Cols.UUID + " = ? ", new String[] {uuidStr} );
+
+    }
+
+        public void deleteContact (UUID uuid){
+        database.delete(ContactTable.NAMETABLE,
+                ContactTable.Cols.UUID + " = ? ",
+                new String[] { uuid.toString() });
+    }
+
     // Cursor คือ ตัวชี้ข้อมูลเพื่อจัดการกับข้อมูล
     public ContactCursorWrapper queryContacts (String whereCause, String[] whereArgs){
         Cursor cursor =  database.query(ContactTable.NAMETABLE,
@@ -68,10 +88,11 @@ public class ContactLab {
         ContactCursorWrapper cursor = queryContacts(null, null);
 
         try {
+            cursor.moveToFirst();
             while (!cursor.isAfterLast()) {
                 contactList.add(cursor.getContact());
+                cursor.moveToNext();
 
-                cursor.moveToFirst();
             }
         }
         finally
@@ -97,6 +118,16 @@ public class ContactLab {
             cursor.close();
         }
 
+    }
+
+    public File getPhotoFile(Contact contact){
+        File externalFilesDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+
+        if(externalFilesDir == null){
+            return null;
+        }
+
+        return new File (externalFilesDir, contact.getPhotoFilename());
     }
 
 }

@@ -1,19 +1,28 @@
 package com.augmentis.ayp.contact_project;
 
+import android.support.annotation.LayoutRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.augmentis.ayp.contact_project.Fragment.ContactListFragment;
+
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 
     private static final String TAG = "Contact";
 
+    @LayoutRes
+    protected int getLayoutResID(){
+        return
+                R.layout.activity_masterdetail;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_fragment);
+        setContentView(getLayoutResID());
 
         Log.d(TAG, "On Create Activity");
 
@@ -37,4 +46,6 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
     }
 
     protected abstract Fragment onCreateFragment();
+
+
 }

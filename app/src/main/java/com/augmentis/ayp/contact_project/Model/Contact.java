@@ -1,4 +1,4 @@
-package com.augmentis.ayp.contact_project;
+package com.augmentis.ayp.contact_project.Model;
 
 import java.util.UUID;
 
@@ -49,5 +49,11 @@ public class Contact {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhotoFilename(){
+
+        return  "IMF_" + getId().toString() + " .jpg";
+
     }
 }

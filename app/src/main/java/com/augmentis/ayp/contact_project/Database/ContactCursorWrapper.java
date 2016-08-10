@@ -1,9 +1,10 @@
-package com.augmentis.ayp.contact_project;
+package com.augmentis.ayp.contact_project.Database;
 
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
-import com.augmentis.ayp.contact_project.ContactDbSchema.ContactTable;
+import com.augmentis.ayp.contact_project.Model.Contact;
+import com.augmentis.ayp.contact_project.Database.ContactDbSchema.ContactTable;
 
 
 import java.util.UUID;
