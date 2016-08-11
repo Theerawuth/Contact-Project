@@ -9,6 +9,7 @@ import android.graphics.Point;
  * Created by Theerawuth on 8/10/2016.
  */
 public class PictureUtils  {
+
     public static Bitmap getScaledBitmap(String path, int destWidth, int destHeight) {
         // Read the Dimension of the image
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -44,9 +45,13 @@ public class PictureUtils  {
 
 
     public static Bitmap  getScaledBitmap(String path, Activity activity){
+
         Point size = new Point();
         activity.getWindowManager().getDefaultDisplay().getSize(size);
 
         return getScaledBitmap(path, size.x, size.y);
     }
+
+
+
 }

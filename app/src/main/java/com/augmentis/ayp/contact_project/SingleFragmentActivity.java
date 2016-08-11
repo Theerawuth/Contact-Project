@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.augmentis.ayp.contact_project.Fragment.ContactListFragment;
 
 public abstract class SingleFragmentActivity extends AppCompatActivity {
 

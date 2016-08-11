@@ -1,17 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/relative_l"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
     android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_margin="10dp"
     >
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
 
         <!--Photo-->
         <ImageView
@@ -19,6 +15,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:scaleType="centerInside"
+            android:background="@mipmap/ic_launcher"
             android:cropToPadding="true"
             />
         <ImageButton
@@ -26,68 +23,54 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:scaleType="centerInside"
+            android:layout_below="@+id/contact_photo_image_view"
             android:src="@android:drawable/ic_menu_camera"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:layout_weight="15">
-
-        <TextView
-            android:text="Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="5dp"/>
 
         <EditText
             android:id="@+id/contact_name"
+            android:layout_marginTop="2dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contact_name_hint"/>
-
-        <TextView
-            android:text="Tel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="5dp"/>
+            android:layout_margin="5dp"
+            android:hint="@string/contact_name_hint"
+            android:layout_toRightOf="@+id/contact_photo_image_view"
+            android:layout_toEndOf="@+id/contact_photo_image_view" />
 
         <EditText
             android:id="@+id/contact_tel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contact_tel_hint"/>
-
-        <TextView
-            android:text="Email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:padding="5dp"/>
+            android:hint="@string/contact_tel_hint"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/contact_name"
+            android:layout_toRightOf="@+id/contact_photo_image_view"
+            android:layout_toEndOf="@+id/contact_photo_image_view" />
 
         <EditText
             android:id="@+id/contact_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/contact_email_hint"/>
+            android:hint="@string/contact_email_hint"
+            android:layout_below="@+id/contact_tel"
+            android:layout_margin="5dp"
+            android:layout_toRightOf="@+id/contact_photo_image_view"
+            android:layout_toEndOf="@+id/contact_photo_image_view" />
 
         <Button
             android:id="@+id/contact_delete_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Delete"
-            android:layout_gravity="bottom"/>
-
-    </LinearLayout>
-
-
-
+            android:layout_gravity="bottom"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
-</LinearLayout>
+
+
+
+
+
+</RelativeLayout>
 

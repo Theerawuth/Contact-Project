@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.augmentis.ayp.contact_project.Fragment.ContactListFragment;
 import com.augmentis.ayp.contact_project.Model.Contact;
 
 import java.util.List;
@@ -19,12 +20,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
     private static final String TAG = "Contact";
     private List<Contact> _contactList;
     private FragmentActivity _fragmentActivity;
+    private ContactListFragment.Callbacks _callbacks;
 
 
-    public ContactAdapter(List<Contact> contactList, FragmentActivity fragmentActivity) {
+    public ContactAdapter(List<Contact> contactList, FragmentActivity fragmentActivity, ContactListFragment.Callbacks callbacks) {
         Log.d(TAG, "ContactAdapter");
         _contactList = contactList;
         _fragmentActivity = fragmentActivity;
+        _callbacks = callbacks;
     }
 
     public void setContact(List<Contact> contactList){
@@ -38,7 +41,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(_fragmentActivity);
         View v = layoutInflater.inflate(R.layout.list_item_contact, parent, false);
 
-        return new ContactHolder(v, _fragmentActivity);
+        return new ContactHolder(v, _fragmentActivity, _callbacks);
     }
 
     @Override

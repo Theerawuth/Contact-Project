@@ -1,5 +1,6 @@
 package com.augmentis.ayp.contact_project.Fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
+import android.telecom.Call;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -47,6 +49,7 @@ public class ContactNewOrEditFragment extends Fragment {
     private ImageView photoView;
     private Contact contact;
     private File mPhotoFile;
+    private Callbacks callbacks;
 
     public static ContactNewOrEditFragment newInstance(UUID contactId) {
         
@@ -55,6 +58,33 @@ public class ContactNewOrEditFragment extends Fragment {
         ContactNewOrEditFragment contactNewOrEditFragment = new ContactNewOrEditFragment();
         contactNewOrEditFragment.setArguments(args);
         return contactNewOrEditFragment;
+    }
+
+    public interface Callbacks {
+        void onContactUpdate(Contact contact);
+        void onContactDelete(Contact contact);
+    }
+
+    private void deleteContact(){
+        ContactLab.getInstance(getActivity()).deleteContact(contact.getId());
+        callbacks.onContactDelete(contact);
+    }
+
+    private void updateContact() {
+        ContactLab.getInstance(getActivity()).updateContact(contact);
+        callbacks.onContactUpdate(contact);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callbacks = (Callbacks) context;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
     }
 
     @Override
@@ -73,7 +103,7 @@ public class ContactNewOrEditFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable final ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(TAG, "Show Edit Contact Page");
         View v = inflater.inflate(R.layout.fragment_new_or_edit_contact, container, false);
 
@@ -88,6 +118,7 @@ public class ContactNewOrEditFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 contact.setName(s.toString());
+                updateContact();
             }
 
             @Override
@@ -107,6 +138,7 @@ public class ContactNewOrEditFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 contact.setPhoneNumber(s.toString());
+                updateContact();
             }
 
             @Override
@@ -126,6 +158,7 @@ public class ContactNewOrEditFragment extends Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 contact.setEmail(s.toString());
+                updateContact();
             }
 
             @Override
@@ -146,7 +179,10 @@ public class ContactNewOrEditFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ContactLab.getInstance(getActivity()).deleteContact(contact.getId());
-                                getActivity().finish();
+                                callbacks.onContactDelete(contact);
+                                callbacks.onContactUpdate(contact);
+                                updateContact();
+
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -212,6 +248,7 @@ public class ContactNewOrEditFragment extends Fragment {
         if(requestCode == REQUEST_CAPTURE_PHOTO) {
             updatePhotoView();
         }
+
     }
 
     @Override

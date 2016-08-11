@@ -1,24 +1,28 @@
 package com.augmentis.ayp.contact_project.Fragment;
 
 import android.content.Context;
-import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.augmentis.ayp.contact_project.ContactAdapter;
 import com.augmentis.ayp.contact_project.Model.Contact;
 import com.augmentis.ayp.contact_project.Model.ContactLab;
-import com.augmentis.ayp.contact_project.ContactNewOrEditActivity;
 import com.augmentis.ayp.contact_project.R;
 
 import java.util.List;
@@ -29,6 +33,7 @@ public class ContactListFragment extends Fragment {
     private RecyclerView contactRecycleView;
     private ContactAdapter contactAdapter;
     private Callbacks callbacks;
+
 
     public interface  Callbacks {
         void onContactSelected(Contact contact);
@@ -48,18 +53,32 @@ public class ContactListFragment extends Fragment {
         callbacks = null;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_contact_list, container, false);
-
         contactRecycleView = (RecyclerView) v.findViewById(R.id.recycle_view_contact_list);
-        contactRecycleView.setLayoutManager(new GridLayoutManager((getActivity()), 3));
+
+
+        // get window managers
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int width = metrics.widthPixels;
+        int dp = (int)(width / (metrics.density));
+
+        if(dp <= 600){
+            Log.d(TAG, "Onepane");
+            contactRecycleView.setLayoutManager(new GridLayoutManager((getActivity()), 3));
+        }
+        else
+        {
+            Log.d(TAG, "Twopane");
+            contactRecycleView.setLayoutManager(new GridLayoutManager((getActivity()), 2));
+        }
 
         Log.d(TAG, "Show ContactList");
         updateUI();
         return v;
-
     }
 
     @Override
@@ -86,8 +105,10 @@ public class ContactListFragment extends Fragment {
                 Log.d(TAG, "ADD Contact:");
                 Contact contact = new Contact();
                 ContactLab.getInstance(getActivity()).addContact(contact);
-                Intent intent = ContactNewOrEditActivity.newIntent(getActivity(), contact.getId());
-                startActivity(intent);
+
+                updateUI();
+                callbacks.onContactSelected(contact);
+                return true;
 
                 //default case
             default:
@@ -110,7 +131,7 @@ public class ContactListFragment extends Fragment {
         }
 
         if(contactAdapter == null){
-            contactAdapter = new ContactAdapter(contactList, getActivity());
+            contactAdapter = new ContactAdapter(contactList, getActivity(), callbacks);
             contactRecycleView.setAdapter(contactAdapter);
         }
         else
